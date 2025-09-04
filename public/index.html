@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Riski Ardiane | Full Stack Developer</title>
+  <link rel="shortcut icon" href="https://i.ibb.co.com/MHvhPsT/1756989417-removebg-preview.png" type="image/x-icon">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            hacker: {
+              black: '#0a0a0a',
+              green: '#00ff00',
+              darkgreen: '#00cc00',
+              neon: '#39ff14',
+              glow: 'rgba(0, 255, 0, 0.4)',
+              bug: 'rgba(255, 0, 0, 0.9)',
+              warning: 'rgba(255, 165, 0, 0.9)'
+            }
+          },
+          fontFamily: {
+            mono: ['JetBrains Mono', 'monospace']
+          },
+          keyframes: {
+            'scroll-pulse': {
+              '0%, 100%': { boxShadow: '0 0 10px theme("colors.hacker.glow")' },
+              '50%': { boxShadow: '0 0 20px theme("colors.hacker.glow")' }
+            },
+            'matrixRain': {
+              '0%': { transform: 'translateY(-100%)' },
+              '100%': { transform: 'translateY(100vh)' }
+            },
+            'pulse-dev': {
+              '0%, 100%': { opacity: '1', boxShadow: '0 0 5px theme("colors.hacker.bug")' },
+              '50%': { opacity: '0.8', boxShadow: '0 0 10px theme("colors.hacker.bug")' }
+            },
+            'blink': {
+              '0%, 100%': { opacity: '1' },
+              '50%': { opacity: '0.5' }
+            },
+            'slideInRight': {
+              '0%': { transform: 'translateX(100%)', opacity: '0' },
+              '100%': { transform: 'translateX(0)', opacity: '1' }
+            },
+            'slideOutRight': {
+              '0%': { transform: 'translateX(0)', opacity: '1' },
+              '100%': { transform: 'translateX(100%)', opacity: '0' }
+            },
+            'modalFadeIn': {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' }
+            },
+            'modalZoomIn': {
+              '0%': { transform: 'scale(0.5)', opacity: '0' },
+              '100%': { transform: 'scale(1)', opacity: '1' }
+            }
+          },
+          animation: {
+            'scroll-pulse': 'scroll-pulse 2s infinite',
+            'matrixRain': 'matrixRain linear infinite',
+            'pulse-dev': 'pulse-dev 1.5s ease-in-out infinite',
+            'blink': 'blink 1s step-end infinite',
+            'slideInRight': 'slideInRight 0.3s ease-out forwards',
+            'slideOutRight': 'slideOutRight 0.3s ease-in forwards',
+            'modalFadeIn': 'modalFadeIn 0.3s ease-out',
+            'modalZoomIn': 'modalZoomIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .text-fill-transparent {
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+      }
+      
+      .cursor {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        position: fixed;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        mix-blend-mode: difference;
+        z-index: 9999;
+        background-color: #00ff00;
+        transition: transform 0.2s, background 0.2s;
+      }
+      
+      .cursor-follower {
+        width: 40px;
+        height: 40px;
+        border: 2px solid theme('colors.hacker.green');
+        border-radius: 50%;
+        position: fixed;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        z-index: 9998;
+        transition: width 0.2s, height 0.2s, border 0.2s;
+      }
+      
+      .matrix-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        pointer-events: none;
+      }
+      
+      .matrix-column {
+        position: absolute;
+        top: -100px;
+        font-family: 'JetBrains Mono', monospace;
+        color: rgba(0, 255, 0, 0.8);
+        text-shadow: 0 0 5px theme('colors.hacker.green');
+        animation: matrixRain linear infinite;
+        animation-duration: 8s;
+        letter-spacing: 2px;
+      }
+      
+      /* Enhanced Hacker Scrollbar */
+      .scrollbar::-webkit-scrollbar {
+        width: 12px;
+        background: rgba(10, 10, 10, 0.7);
+      }
+      
+      .scrollbar::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.5);
+        border-left: 1px solid theme('colors.hacker.green');
+      }
+      
+      .scrollbar::-webkit-scrollbar-thumb {
+        background: linear-gradient(90deg, 
+          theme('colors.hacker.green') 0%, 
+          theme('colors.hacker.neon') 100%);
+        border: 2px solid theme('colors.hacker.black');
+        border-radius: 6px;
+        box-shadow: 0 0 10px theme('colors.hacker.glow');
+        transition: all 0.3s ease;
+      }
+      
+      .scrollbar::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(90deg, 
+          theme('colors.hacker.neon') 0%, 
+          theme('colors.hacker.green') 100%);
+        box-shadow: 0 0 15px theme('colors.hacker.glow');
+        transform: scale(1.05);
+      }
+      
+      .scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: theme('colors.hacker.green') rgba(10, 10, 10, 0.7);
+      }
+      
+      .project-card {
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transform: translateY(20px);
+        opacity: 0;
+        will-change: transform, opacity;
+      }
+      
+      .project-card.visible {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      
+      .glow-border {
+        box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+        transition: box-shadow 0.3s;
+      }
+      
+      .glow-border:hover {
+        box-shadow: 0 0 25px rgba(0, 255, 0, 0.6);
+      }
+      
+      .animate-float {
+        animation: float 6s ease-in-out infinite;
+      }
+      
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
+      }
+      
+      /* Terminal-like typing effect */
+      .typing-effect {
+        overflow: hidden;
+        border-right: 2px solid theme('colors.hacker.green');
+        white-space: nowrap;
+        animation: 
+          typing 3.5s steps(40, end) forwards,
+          blink 0.75s step-end infinite;
+        width: 0;
+      }
+      
+      @keyframes typing {
+        from { width: 0 }
+        to { width: 100% }
+      }
+      
+      @keyframes blink {
+        50% { border-color: transparent }
+      }
+      
+      /* Enhanced project card */
+      .project-card {
+        transform: translateY(0) !important;
+        opacity: 1 !important;
+        transition: all 0.4s ease;
+      }
+      
+      .project-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 255, 0, 0.2);
+      }
+      
+      /* Terminal command styling */
+      .terminal-command {
+        background: rgba(0, 0, 0, 0.3);
+        border-left: 3px solid theme('colors.hacker.green');
+        padding: 0.5rem 1rem;
+        margin: 1rem 0;
+        font-family: 'JetBrains Mono', monospace;
+      }
+      
+      .terminal-prompt {
+        color: theme('colors.hacker.green');
+      }
+      
+      .terminal-output {
+        color: #aaa;
+      }
+
+      /* Bug status badge - MORE PROMINENT */
+      .bug-status {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: theme('colors.hacker.bug');
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        animation: pulse-dev 1.5s ease-in-out infinite;
+        z-index: 10;
+        box-shadow: 0 0 8px rgba(255, 0, 0, 0.7);
+        border: 1px solid rgba(255, 100, 100, 0.5);
+        text-shadow: 0 0 3px black;
+      }
+
+      /* Warning status badge */
+      .warning-status {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: theme('colors.hacker.warning');
+        color: black;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        animation: blink 1.5s step-end infinite;
+        z-index: 10;
+        box-shadow: 0 0 8px rgba(255, 165, 0, 0.7);
+        border: 1px solid rgba(255, 200, 0, 0.5);
+      }
+
+      /* Project image styling */
+      .project-image {
+        width: 100%;
+        height: 256px;
+        object-fit: cover;
+        border-radius: 0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .project-image:hover {
+        transform: scale(1.05);
+        filter: brightness(1.1);
+      }
+
+      /* Image Modal Styles */
+      .image-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 99999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(5px);
+      }
+
+      .image-modal.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .modal-content {
+        position: relative;
+        max-width: 90%;
+        max-height: 90%;
+        transform: scale(0.5);
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        border: 2px solid theme('colors.hacker.green');
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+      }
+
+      .image-modal.active .modal-content {
+        transform: scale(1);
+      }
+
+      .modal-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+      }
+
+      .modal-close {
+        position: absolute;
+        top: -15px;
+        right: -15px;
+        width: 40px;
+        height: 40px;
+        background: theme('colors.hacker.green');
+        border: 2px solid theme('colors.hacker.black');
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 1;
+        font-size: 18px;
+        font-weight: bold;
+        color: black;
+        box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+      }
+
+      .modal-close:hover {
+        background: theme('colors.hacker.neon');
+        transform: scale(1.1);
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+      }
+
+      .modal-close::before {
+        content: '×';
+        font-size: 24px;
+        line-height: 1;
+      }
+
+      /* Google Translate styling */
+      #google_translate_element {
+        background: rgba(0, 255, 0, 0.1);
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid theme('colors.hacker.green');
+      }
+
+      .goog-te-combo {
+        background: #0a0a0a !important;
+        color: #00ff00 !important;
+        border: 1px solid #00ff00 !important;
+        border-radius: 4px;
+        padding: 4px;
+        font-family: 'JetBrains Mono', monospace;
+      }
+
+      .goog-te-combo option {
+        background: #0a0a0a !important;
+        color: #00ff00 !important;
+      }
+
+      /* Mobile Sidebar Styles */
+      .mobile-sidebar {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background: rgba(10, 10, 10, 0.98);
+        backdrop-filter: blur(10px);
+        border-left: 2px solid theme('colors.hacker.green');
+        z-index: 9999;
+        transition: right 0.3s ease-in-out;
+        box-shadow: -5px 0 20px rgba(0, 255, 0, 0.1);
+      }
+
+      .mobile-sidebar.open {
+        right: 0;
+      }
+
+      .mobile-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 9998;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease-in-out;
+      }
+
+      .mobile-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      /* Hamburger Menu Animation */
+      .hamburger {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        position: relative;
+        z-index: 10000;
+      }
+
+      .hamburger span {
+        display: block;
+        height: 2px;
+        width: 100%;
+        background: theme('colors.hacker.green');
+        margin: 5px 0;
+        transition: all 0.3s ease-in-out;
+        transform-origin: center;
+      }
+
+      .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(7px, 7px);
+      }
+
+      .hamburger.active span:nth-child(2) {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+
+      .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -7px);
+      }
+
+      /* Mobile sidebar content */
+      .sidebar-link {
+        display: block;
+        padding: 1rem 1.5rem;
+        color: theme('colors.hacker.green');
+        text-decoration: none;
+        border-bottom: 1px solid rgba(0, 255, 0, 0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .sidebar-link:hover {
+        background: rgba(0, 255, 0, 0.1);
+        color: theme('colors.hacker.neon');
+        padding-left: 2rem;
+      }
+
+      .sidebar-link::before {
+        content: '>';
+        position: absolute;
+        left: 1rem;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .sidebar-link:hover::before {
+        opacity: 1;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 640px) {
+        .hero-title {
+          font-size: 2.5rem;
+        }
+        
+        .hero-subtitle {
+          font-size: 1.5rem;
+        }
+        
+        .project-card {
+          margin-bottom: 1.5rem;
+        }
+        
+        .mobile-sidebar {
+          width: 100%;
+          max-width: 320px;
+        }
+
+        .modal-content {
+          max-width: 95%;
+          max-height: 80%;
+        }
+
+        .modal-close {
+          top: -10px;
+          right: -10px;
+          width: 35px;
+          height: 35px;
+        }
+      }
+    }
+  </style>
+</head>
+<body class="bg-hacker-black text-hacker-green font-mono min-h-screen scrollbar overflow-x-hidden relative">
+  <!-- Matrix Background -->
+  <div class="matrix-bg" id="matrixBackground"></div>
+  
+  <!-- Custom Cursor -->
+  <div class="cursor hidden lg:block" id="cursor"></div>
+  <div class="cursor-follower hidden lg:block" id="cursorFollower"></div>
+  
+  <!-- Image Modal -->
+  <div class="image-modal" id="imageModal">
+    <div class="modal-content">
+      <div class="modal-close" id="modalClose"></div>
+      <img class="modal-image" id="modalImage" src="" alt="Full screen image">
+    </div>
+  </div>
+  
+  <!-- Mobile Overlay -->
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+  
+  <!-- Mobile Sidebar -->
+  <div class="mobile-sidebar" id="mobileSidebar">
+    <div class="p-6 border-b border-hacker-green/30">
+      <h3 class="text-xl font-bold bg-gradient-to-r from-hacker-green to-hacker-neon text-fill-transparent">NAVIGATION</h3>
+    </div>
+    <nav class="py-4">
+      <a href="#" class="sidebar-link">Home</a>
+      <a href="#projects" class="sidebar-link">Projects</a>
+      <a href="#contact" class="sidebar-link">Contact</a>
+      <div class="px-6 py-4">
+        <div class="text-sm text-gray-400 mb-2">Language:</div>
+        <div id="google_translate_element_mobile"></div>
+      </div>
+    </nav>
+    <div class="absolute bottom-6 left-6 right-6">
+      <div class="terminal-command text-xs">
+        <span class="terminal-prompt">$</span> mobile --navigation
+      </div>
+    </div>
+  </div>
+  
+  <!-- Navigation -->
+  <nav class="border-b border-hacker-green py-4 px-6 sticky top-0 bg-hacker-black/90 backdrop-blur-sm z-50">
+    <div class="container mx-auto flex justify-between items-center">
+      <a href="#" class="text-2xl font-bold bg-gradient-to-r from-hacker-green to-hacker-neon text-fill-transparent animate-pulse">RISKI ARDIANE</a>
+      
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-6">
+        <a href="#projects" class="hover:text-hacker-neon transition-colors border-b-2 border-transparent hover:border-hacker-green">Projects</a>
+        <a href="#contact" class="hover:text-hacker-neon transition-colors border-b-2 border-transparent hover:border-hacker-green">Contact</a>
+        <div id="google_translate_element"></div>
+      </div>
+      
+      <!-- Mobile Hamburger Menu -->
+      <div class="md:hidden">
+        <div class="hamburger" id="mobileMenuToggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="py-20 px-6">
+    <div class="container mx-auto max-w-4xl">
+      <div class="text-center mb-16">
+        <h1 class="text-5xl md:text-7xl font-bold mb-6 hero-title">
+          <span class="bg-gradient-to-r from-hacker-green to-hacker-neon text-fill-transparent">FULL STACK</span><br>
+          <span class="text-4xl hero-subtitle">DEVELOPER</span>
+        </h1>
+        <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-8 typing-effect" style="width: 100%">
+          Building dynamic web applications with modern technologies. Specializing in React, Node.js, and Express.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+          <a href="#projects" class="bg-hacker-green text-black font-bold py-3 px-8 rounded-lg hover:bg-hacker-neon transition-colors transform hover:scale-105">
+            VIEW PROJECTS
+          </a>
+          <a href="#contact" class="border-2 border-hacker-green py-3 px-8 rounded-lg hover:bg-hacker-green/20 transition-colors">
+            CONTACT ME
+          </a>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-gray-900 p-6 rounded-xl border border-hacker-green glow-border">
+          <h3 class="text-2xl font-bold mb-4 text-hacker-neon">React & Vite</h3>
+          <p class="text-gray-300">Building fast, responsive UIs with modern React ecosystem and Vite for lightning-fast development.</p>
+        </div>
+        <div class="bg-gray-900 p-6 rounded-xl border border-hacker-green glow-border">
+          <h3 class="text-2xl font-bold mb-4 text-hacker-neon">Node.js & Express</h3>
+          <p class="text-gray-300">Creating robust backend services with Express and Node.js, implementing RESTful APIs and authentication.</p>
+        </div>
+        <div class="bg-gray-900 p-6 rounded-xl border border-hacker-green glow-border">
+          <h3 class="text-2xl font-bold mb-4 text-hacker-neon">Full Stack</h3>
+          <p class="text-gray-300">End-to-end development from UI/UX design to database architecture and deployment.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects" class="py-20 px-6 bg-gray-900/50">
+    <div class="container mx-auto">
+      <h2 class="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-hacker-green to-hacker-neon text-fill-transparent">MY PROJECTS</h2>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+        
+        <!-- Project 1: SpidApi -->
+        <div class="project-card bg-gray-900 rounded-xl overflow-hidden border border-hacker-green glow-border">
+          <div class="relative overflow-hidden">
+            <!-- IMPORTANT: Bug status badge with red color -->
+            <div class="bug-status">RUNNING WITH BUGS</div>
+            <img 
+              src="https://i.ibb.co.com/fGVBCMWW/Screenshot-2025-09-04-201142.png" 
+              alt="SpidApi Project" 
+              class="project-image clickable-image"
+              loading="lazy"
+              data-src="https://i.ibb.co.com/fGVBCMWW/Screenshot-2025-09-04-201142.png"
+            />
+            <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+              <a href="https://script-host-io.lovable.app/" target="_blank" rel="noopener" class="bg-hacker-green text-black font-bold py-2 px-6 rounded">VIEW LIVE DEMO</a>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-2xl font-bold mb-3 flex items-center">
+              SpidApi
+              <span class="ml-2 bg-hacker-green/20 text-hacker-green text-xs px-2 py-1 rounded">REACT • EXPRESS</span>
+            </h3>
+            <p class="text-gray-300 mb-4">Build your API from this one website</p>
+            
+            <div class="mb-4">
+              <h4 class="font-bold text-hacker-green mb-2">Key Features:</h4>
+              <ul class="list-disc list-inside text-gray-300 space-y-1">
+                <li>Easy API Creation</li>
+                <li>API Request List</li>
+                <li>Sample Fetch Code</li>
+                <li>Easy API File Data Upload</li>
+                <li>Easy Parameter Creation</li>
+                <li>Public/Private Access (Via APIKEYS)</li>
+              </ul>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+              <div class="terminal-command">
+                <span class="terminal-prompt">$</span> node server.js
+              </div>
+              <a href="https://script-host-io.lovable.app/" target="_blank" rel="noopener" 
+                 class="text-hacker-green hover:text-hacker-neon font-bold flex items-center group">
+                Visit Project 
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Project 2: CodersAi -->
+        <div class="project-card bg-gray-900 rounded-xl overflow-hidden border border-hacker-green glow-border">
+          <div class="relative overflow-hidden">
+            <!-- IMPORTANT: Bug status badge with red color -->
+            <div class="bug-status">RUNNING WITH BUGS</div>
+            <img 
+              src="https://i.ibb.co.com/99Nqnszc/Screenshot-2025-09-04-201910.png" 
+              alt="CodersAi Project" 
+              class="project-image clickable-image"
+              loading="lazy"
+              data-src="https://i.ibb.co.com/99Nqnszc/Screenshot-2025-09-04-201910.png"
+            />
+            <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+              <a href="https://groq-code-studio.lovable.app/" target="_blank" rel="noopener" class="bg-hacker-green text-black font-bold py-2 px-6 rounded">VIEW LIVE DEMO</a>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-2xl font-bold mb-3 flex items-center">
+              CodersAi
+              <span class="ml-2 bg-hacker-green/20 text-hacker-green text-xs px-2 py-1 rounded">REACT • TENSORFLOW</span>
+            </h3>
+            <p class="text-gray-300 mb-4">Make Projects Easier on CodersAi</p>
+            
+            <div class="mb-4">
+              <h4 class="font-bold text-hacker-green mb-2">Key Features:</h4>
+              <ul class="list-disc list-inside text-gray-300 space-y-1">
+                <li>Simplify Projects</li>
+                <li>24/7 Access, Always Online</li>
+                <li>AI Chatbots Make Work Easier</li>
+                <li>Manage Projects</li>
+                <li>Build Your Own AI (UNDER DEVELOPMENT)</li>
+              </ul>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+              <div class="terminal-command">
+                <span class="terminal-prompt">$</span> yarn start
+              </div>
+              <a href="https://groq-code-studio.lovable.app/" target="_blank" rel="noopener" 
+                 class="text-hacker-green hover:text-hacker-neon font-bold flex items-center group">
+                Visit Project 
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Project 3: Partner LOVABLE -->
+        <div class="project-card bg-gray-900 rounded-xl overflow-hidden border border-hacker-green glow-border">
+          <div class="relative overflow-hidden">
+            <!-- No bug status for this project -->
+            <img 
+              src="https://iili.io/KCoBdkN.md.png" 
+              alt="LOVABLE Project" 
+              class="project-image clickable-image"
+              loading="lazy"
+              data-src="https://iili.io/KCoBdkN.md.png"
+            />
+            <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+              <a href="https://lovable.dev/invite/530d9335-a122-4246-adcd-7d746b46fa3c" target="_blank" rel="noopener" class="bg-hacker-green text-black font-bold py-2 px-6 rounded">VIEW LIVE DEMO</a>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-2xl font-bold mb-3 flex items-center">
+              LOVABLE
+              <span class="ml-2 bg-hacker-green/20 text-hacker-green text-xs px-2 py-1 rounded">PARTNER PROJECT</span>
+            </h3>
+            <p class="text-gray-300 mb-4">Create a Website Easily Just Quickly and Done in Minutes</p>
+            
+            <div class="mb-4">
+              <h4 class="font-bold text-hacker-green mb-2">Key Features:</h4>
+              <ul class="list-disc list-inside text-gray-300 space-y-1">
+                <li>Create a Website Easily with Just Promt</li>
+                <li>Access the supabase.com database</li>
+                <li>Access the GitHub Repository</li>
+                <li>Deploy the Website</li>
+                <li>Login and Register via Google and GitHub</li>
+                <li>Collaborate with Your Team</li>
+              </ul>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+              <div class="terminal-command">
+                <span class="terminal-prompt">$</span> npm start
+              </div>
+              <a href="https://lovable.dev/invite/530d9335-a122-4246-adcd-7d746b46fa3c" target="_blank" rel="noopener" 
+                 class="text-hacker-green hover:text-hacker-neon font-bold flex items-center group">
+                Visit Web's 
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="py-20 px-6">
+    <div class="container mx-auto max-w-4xl">
+      <h2 class="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-hacker-green to-hacker-neon text-fill-transparent">GET IN TOUCH</h2>
+      
+      <div class="bg-gray-900 p-8 rounded-xl border border-hacker-green glow-border">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h3 class="text-2xl font-bold mb-6">Let's Connect</h3>
+            <p class="text-gray-300 mb-6">
+              I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
+            </p>
+            
+            <div class="space-y-4">
+              <div class="flex items-start">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-hacker-green mr-3 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <div>
+                  <h4 class="font-bold">Email</h4>
+                  <a href="mailto:riskiardiane@gmail.com" class="text-gray-300 hover:text-hacker-green transition-colors">riskiardiane@gmail.com</a>
+                </div>
+              </div>
+              
+              <div class="flex items-start">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-hacker-green mr-3 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m-9 9a9 9 0 019-9" />
+                </svg>
+                <div>
+                  <h4 class="font-bold">Location</h4>
+                  <p class="text-gray-300">Jakarta, Indonesia</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-hacker-green mr-3 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+                <div>
+                  <h4 class="font-bold">Social</h4>
+                  <div class="flex space-x-4 mt-1">
+                    <a href="https://github.com/InDsToReE" class="text-gray-400 hover:text-hacker-green transition-colors">GitHub</a>
+                    <a href="https://www.linkedin.com/in/riski-ardiane-3353b6304/" class="text-gray-400 hover:text-hacker-green transition-colors">LinkedIn</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <form class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium mb-1">Name</label>
+                <input type="text" class="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 focus:outline-none focus:border-hacker-green focus:ring-1 focus:ring-hacker-green">
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1">Email</label>
+                <input type="email" class="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 focus:outline-none focus:border-hacker-green focus:ring-1 focus:ring-hacker-green">
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1">Message</label>
+                <textarea rows="5" class="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 focus:outline-none focus:border-hacker-green focus:ring-1 focus:ring-hacker-green"></textarea>
+              </div>
+              <button type="submit" class="w-full bg-hacker-green text-black font-bold py-3 px-4 rounded-lg hover:bg-hacker-neon transition-colors flex items-center justify-center">
+                SEND MESSAGE
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-8 border-t border-hacker-green">
+    <div class="container mx-auto px-6 text-center">
+      <div class="terminal-command mb-2 inline-block">
+        <span class="terminal-prompt">$</span> contact --email riskiardiane@gmail.com
+      </div>
+      <p class="text-gray-500">@2025 Riski Ardiane. All rights reserved.</p>
+      
+      <div class="mt-6 flex justify-center space-x-4">
+        <a href="https://github.com/InDsToReE" class="text-gray-400 hover:text-hacker-green transition-colors">GitHub</a>
+        <a href="https://www.linkedin.com/in/riski-ardiane-3353b6304/" class="text-gray-400 hover:text-hacker-green transition-colors">LinkedIn</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Matrix Background Animation
+    document.addEventListener('DOMContentLoaded', function() {
+      const matrixBg = document.getElementById('matrixBackground');
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789$%^&*()';
+      const fontSize = 16;
+      const columns = Math.floor(window.innerWidth / fontSize);
+      
+      // Create matrix columns
+      for (let i = 0; i < columns; i++) {
+        const column = document.createElement('div');
+        column.className = 'matrix-column';
+        column.style.left = `${i * fontSize}px`;
+        column.style.fontSize = `${fontSize}px`;
+        
+        // Random animation duration between 5-10 seconds
+        const duration = Math.random() * 5 + 5;
+        column.style.animationDuration = `${duration}s`;
+        column.style.animationDelay = `${Math.random() * 5}s`;
+        
+        // Generate random characters for the column
+        let text = '';
+        const length = Math.floor(Math.random() * 50) + 20;
+        for (let j = 0; j < length; j++) {
+          text += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        column.textContent = text;
+        
+        matrixBg.appendChild(column);
+      }
+      
+      // Image Modal Functionality
+      const imageModal = document.getElementById('imageModal');
+      const modalImage = document.getElementById('modalImage');
+      const modalClose = document.getElementById('modalClose');
+      const clickableImages = document.querySelectorAll('.clickable-image');
+      
+      // Open modal when clicking on project images
+      clickableImages.forEach(image => {
+        image.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const imageSrc = this.getAttribute('data-src') || this.src;
+          const imageAlt = this.alt;
+          
+          modalImage.src = imageSrc;
+          modalImage.alt = imageAlt;
+          imageModal.classList.add('active');
+          document.body.style.overflow = 'hidden'; // Prevent body scroll
+        });
+      });
+      
+      // Close modal when clicking close button
+      modalClose.addEventListener('click', closeModal);
+      
+      // Close modal when clicking outside the image
+      imageModal.addEventListener('click', function(e) {
+        if (e.target === imageModal) {
+          closeModal();
+        }
+      });
+      
+      // Close modal with Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && imageModal.classList.contains('active')) {
+          closeModal();
+        }
+      });
+      
+      function closeModal() {
+        imageModal.classList.remove('active');
+        document.body.style.overflow = ''; // Restore body scroll
+        setTimeout(() => {
+          modalImage.src = ''; // Clear src after animation
+        }, 300);
+      }
+      
+      // Mobile Menu Toggle
+      const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+      const mobileSidebar = document.getElementById('mobileSidebar');
+      const mobileOverlay = document.getElementById('mobileOverlay');
+      
+      function toggleMobileMenu() {
+        const isOpen = mobileSidebar.classList.contains('open');
+        
+        if (isOpen) {
+          // Close menu
+          mobileSidebar.classList.remove('open');
+          mobileOverlay.classList.remove('active');
+          mobileMenuToggle.classList.remove('active');
+          document.body.style.overflow = '';
+        } else {
+          // Open menu
+          mobileSidebar.classList.add('open');
+          mobileOverlay.classList.add('active');
+          mobileMenuToggle.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+      }
+      
+      mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+      mobileOverlay.addEventListener('click', toggleMobileMenu);
+      
+      // Close mobile menu when clicking on sidebar links
+      document.querySelectorAll('.sidebar-link').forEach(link => {
+        link.addEventListener('click', () => {
+          setTimeout(toggleMobileMenu, 300); // Small delay for smooth navigation
+        });
+      });
+      
+      // Close mobile menu on window resize if screen becomes larger
+      window.addEventListener('resize', () => {
+        if (window.innerWidth >= 768 && mobileSidebar.classList.contains('open')) {
+          toggleMobileMenu();
+        }
+      });
+      
+      // Custom Cursor (only on larger screens)
+      const cursor = document.getElementById('cursor');
+      const cursorFollower = document.getElementById('cursorFollower');
+      
+      if (window.innerWidth >= 1024) {
+        document.addEventListener('mousemove', (e) => {
+          cursor.style.left = e.clientX + 'px';
+          cursor.style.top = e.clientY + 'px';
+          
+          setTimeout(() => {
+            cursorFollower.style.left = e.clientX + 'px';
+            cursorFollower.style.top = e.clientY + 'px';
+          }, 30);
+        });
+        
+        // Cursor interaction with links and buttons
+        document.querySelectorAll('a, button, .clickable-image').forEach(item => {
+          item.addEventListener('mouseenter', () => {
+            cursor.style.transform = 'translate(-50%, -50%) scale(2.5)';
+            cursor.style.background = '#00ff00';
+            cursorFollower.style.transform = 'translate(-50%, -50%) scale(1.5)';
+            cursorFollower.style.borderColor = '#39ff14';
+          });
+          
+          item.addEventListener('mouseleave', () => {
+            cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+            cursor.style.background = '#00ff00';
+            cursorFollower.style.transform = 'translate(-50%, -50%) scale(1)';
+            cursorFollower.style.borderColor = '#00ff00';
+          });
+        });
+      }
+      
+      // Force projects to be visible immediately (fix for visibility issue)
+      document.querySelectorAll('.project-card').forEach(card => {
+        card.classList.add('visible');
+      });
+      
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            window.scrollTo({
+              top: target.offsetTop - 80,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+      
+      // Scroll animations for elements
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      document.querySelectorAll('.project-card, .terminal-command').forEach(element => {
+        observer.observe(element);
+      });
+      
+      // Add pulse animation to scrollbar
+      const scrollbarThumb = document.createElement('style');
+      scrollbarThumb.innerHTML = `
+        ::-webkit-scrollbar-thumb {
+          animation: scroll-pulse 2s infinite;
+        }
+      `;
+      document.head.appendChild(scrollbarThumb);
+
+      // Image error handling - fallback to placeholder if image fails to load
+      document.querySelectorAll('.project-image').forEach(img => {
+        img.addEventListener('error', function() {
+          this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjI1NiIgdmlld0JveD0iMCAwIDgwMCAyNTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iMjU2IiBmaWxsPSIjMTExODI3Ii8+CjxwYXRoIGQ9Ik00MDAgMTI4TDM2MCA4OEg0NDBMNDAwIDEyOFoiIGZpbGw9IiMwMEZGMDAiLz4KPHR5cGUgeD0iNDAwIiB5PSIxNTAiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiMwMEZGMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPlByb2plY3QgSW1hZ2U8L3R5cGU+Cjwvc3ZnPg==';
+        });
+      });
+
+      // Initialize Google Translate for mobile sidebar
+      setTimeout(() => {
+        if (typeof google !== 'undefined' && google.translate) {
+          new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'en,id,es,fr,de,ja,ko,zh'
+          }, 'google_translate_element_mobile');
+        }
+      }, 1000);
+    });
+
+    // Prevent body scroll when mobile menu is open
+    document.addEventListener('touchmove', function(e) {
+      if (document.body.style.overflow === 'hidden') {
+        e.preventDefault();
+      }
+    }, { passive: false });
+  </script>
+</body>
+</html>

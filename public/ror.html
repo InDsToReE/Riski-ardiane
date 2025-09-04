@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Error - Riski Ardiane | Full Stack Developer</title>
+  <link rel="shortcut icon" href="https://i.ibb.co.com/MHvhPsT/1756989417-removebg-preview.png" type="image/x-icon">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            hacker: {
+              black: '#0a0a0a',
+              green: '#00ff00',
+              darkgreen: '#00cc00',
+              neon: '#39ff14',
+              glow: 'rgba(0, 255, 0, 0.4)',
+              bug: 'rgba(255, 0, 0, 0.9)',
+              warning: 'rgba(255, 165, 0, 0.9)'
+            }
+          },
+          fontFamily: {
+            mono: ['JetBrains Mono', 'monospace']
+          },
+          keyframes: {
+            'scroll-pulse': {
+              '0%, 100%': { boxShadow: '0 0 10px theme("colors.hacker.glow")' },
+              '50%': { boxShadow: '0 0 20px theme("colors.hacker.glow")' }
+            },
+            'matrixRain': {
+              '0%': { transform: 'translateY(-100%)' },
+              '100%': { transform: 'translateY(100vh)' }
+            },
+            'pulse-dev': {
+              '0%, 100%': { opacity: '1', boxShadow: '0 0 5px theme("colors.hacker.bug")' },
+              '50%': { opacity: '0.8', boxShadow: '0 0 10px theme("colors.hacker.bug")' }
+            },
+            'blink': {
+              '0%, 100%': { opacity: '1' },
+              '50%': { opacity: '0.5' }
+            },
+            'slideInRight': {
+              '0%': { transform: 'translateX(100%)', opacity: '0' },
+              '100%': { transform: 'translateX(0)', opacity: '1' }
+            },
+            'slideOutRight': {
+              '0%': { transform: 'translateX(0)', opacity: '1' },
+              '100%': { transform: 'translateX(100%)', opacity: '0' }
+            },
+            'glitch': {
+              '0%': { transform: 'translate(0)' },
+              '20%': { transform: 'translate(-2px, 2px)' },
+              '40%': { transform: 'translate(-2px, -2px)' },
+              '60%': { transform: 'translate(2px, 2px)' },
+              '80%': { transform: 'translate(2px, -2px)' },
+              '100%': { transform: 'translate(0)' }
+            },
+            'error-pulse': {
+              '0%, 100%': { 
+                boxShadow: '0 0 20px rgba(255, 0, 0, 0.3)',
+                textShadow: '0 0 10px rgba(255, 0, 0, 0.5)'
+              },
+              '50%': { 
+                boxShadow: '0 0 30px rgba(255, 0, 0, 0.6)',
+                textShadow: '0 0 15px rgba(255, 0, 0, 0.8)'
+              }
+            }
+          },
+          animation: {
+            'scroll-pulse': 'scroll-pulse 2s infinite',
+            'matrixRain': 'matrixRain linear infinite',
+            'pulse-dev': 'pulse-dev 1.5s ease-in-out infinite',
+            'blink': 'blink 1s step-end infinite',
+            'slideInRight': 'slideInRight 0.3s ease-out forwards',
+            'slideOutRight': 'slideOutRight 0.3s ease-in forwards',
+            'glitch': 'glitch 0.5s infinite',
+            'error-pulse': 'error-pulse 2s ease-in-out infinite'
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .text-fill-transparent {
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+      }
+      
+      .cursor {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        position: fixed;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        mix-blend-mode: difference;
+        z-index: 9999;
+        background-color: #00ff00;
+        transition: transform 0.2s, background 0.2s;
+      }
+      
+      .cursor-follower {
+        width: 40px;
+        height: 40px;
+        border: 2px solid theme('colors.hacker.green');
+        border-radius: 50%;
+        position: fixed;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        z-index: 9998;
+        transition: width 0.2s, height 0.2s, border 0.2s;
+      }
+      
+      .matrix-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        pointer-events: none;
+      }
+      
+      .matrix-column {
+        position: absolute;
+        top: -100px;
+        font-family: 'JetBrains Mono', monospace;
+        color: rgba(0, 255, 0, 0.8);
+        text-shadow: 0 0 5px theme('colors.hacker.green');
+        animation: matrixRain linear infinite;
+        animation-duration: 8s;
+        letter-spacing: 2px;
+      }
+
+      .scrollbar::-webkit-scrollbar {
+        width: 12px;
+        background: rgba(10, 10, 10, 0.7);
+      }
+      
+      .scrollbar::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.5);
+        border-left: 1px solid theme('colors.hacker.green');
+      }
+      
+      .scrollbar::-webkit-scrollbar-thumb {
+        background: linear-gradient(90deg, 
+          theme('colors.hacker.green') 0%, 
+          theme('colors.hacker.neon') 100%);
+        border: 2px solid theme('colors.hacker.black');
+        border-radius: 6px;
+        box-shadow: 0 0 10px theme('colors.hacker.glow');
+        transition: all 0.3s ease;
+      }
+      
+      .scrollbar::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(90deg, 
+          theme('colors.hacker.neon') 0%, 
+          theme('colors.hacker.green') 100%);
+        box-shadow: 0 0 15px theme('colors.hacker.glow');
+        transform: scale(1.05);
+      }
+
+      .mobile-sidebar {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background: rgba(10, 10, 10, 0.98);
+        backdrop-filter: blur(10px);
+        border-left: 2px solid theme('colors.hacker.green');
+        z-index: 9999;
+        transition: right 0.3s ease-in-out;
+        box-shadow: -5px 0 20px rgba(0, 255, 0, 0.1);
+      }
+
+      .mobile-sidebar.open {
+        right: 0;
+      }
+
+      .mobile-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 9998;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease-in-out;
+      }
+
+      .mobile-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .hamburger {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        position: relative;
+        z-index: 10000;
+      }
+
+      .hamburger span {
+        display: block;
+        height: 2px;
+        width: 100%;
+        background: theme('colors.hacker.green');
+        margin: 5px 0;
+        transition: all 0.3s ease-in-out;
+        transform-origin: center;
+      }
+
+      .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(7px, 7px);
+      }
+
+      .hamburger.active span:nth-child(2) {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+
+      .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -7px);
+      }
+
+      .sidebar-link {
+        display: block;
+        padding: 1rem 1.5rem;
+        color: theme('colors.hacker.green');
+        text-decoration: none;
+        border-bottom: 1px solid rgba(0, 255, 0, 0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .sidebar-link:hover {
+        background: rgba(0, 255, 0, 0.1);
+        color: theme('colors.hacker.neon');
+        padding-left: 2rem;
+      }
+
+      .sidebar-link::before {
+        content: '>';
+        position: absolute;
+        left: 1rem;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .sidebar-link:hover::before {
+        opacity: 1;
+      }
+
+      #google_translate_element {
+        background: rgba(0, 255, 0, 0.1);
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid theme('colors.hacker.green');
+      }
+
+      .goog-te-combo {
+        background: #0a0a0a !important;
+        color: #00ff00 !important;
+        border: 1px solid #00ff00 !important;
+        border-radius: 4px;
+        padding: 4px;
+        font-family: 'JetBrains Mono', monospace;
+      }
+
+      .goog-te-combo option {
+        background: #0a0a0a !important;
+        color: #00ff00 !important;
+      }
+
+      .terminal-command {
+        background: rgba(0, 0, 0, 0.3);
+        border-left: 3px solid theme('colors.hacker.green');
+        padding: 0.5rem 1rem;
+        margin: 1rem 0;
+        font-family: 'JetBrains Mono', monospace;
+      }
+      
+      .terminal-prompt {
+        color: theme('colors.hacker.green');
+      }
+      
+      .terminal-output {
+        color: #aaa;
+      }
+
+      .error-ascii {
+        font-family: 'JetBrains Mono', monospace;
+        line-height: 1;
+        white-space: pre;
+        color: #ff0000;
+        text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+      }
+
+      .error-404 {
+        color: #ff0000;
+        text-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+      }
+
+      .error-500 {
+        color: #ff6600;
+        text-shadow: 0 0 20px rgba(255, 102, 0, 0.6);
+      }
+
+      .error-503 {
+        color: #ffaa00;
+        text-shadow: 0 0 20px rgba(255, 170, 0, 0.6);
+      }
+
+      @media (max-width: 640px) {
+        .mobile-sidebar {
+          width: 100%;
+          max-width: 320px;
+        }
+        
+        .error-ascii {
+          font-size: 8px;
+        }
+      }
+    }
+  </style>
+</head>
+<body class="bg-hacker-black text-hacker-green font-mono min-h-screen scrollbar overflow-x-hidden relative">
+  <!-- Matrix Background -->
+  <div class="matrix-bg" id="matrixBackground"></div>
+  
+  <!-- Custom Cursor -->
+  <div class="cursor hidden lg:block" id="cursor"></div>
+  <div class="cursor-follower hidden lg:block" id="cursorFollower"></div>
+  
+  <!-- Mobile Overlay -->
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+  
+  <!-- Mobile Sidebar -->
+  <div class="mobile-sidebar" id="mobileSidebar">
+    <div class="p-6 border-b border-hacker-green/30">
+      <h3 class="text-xl font-bold bg-gradient-to-r from-hacker-green to-hacker-neon text-fill-transparent">NAVIGATION</h3>
+    </div>
+    <nav class="py-4">
+      <a href="/" class="sidebar-link">Home</a>
+      <a href="/#projects" class="sidebar-link">Projects</a>
+      <a href="/#contact" class="sidebar-link">Contact</a>
+      <div class="px-6 py-4">
+        <div class="text-sm text-gray-400 mb-2">Language:</div>
+        <div id="google_translate_element_mobile"></div>
+      </div>
+    </nav>
+    <div class="absolute bottom-6 left-6 right-6">
+      <div class="terminal-command text-xs">
+        <span class="terminal-prompt">$</span> mobile --navigation
+      </div>
+    </div>
+  </div>
+  
+  <!-- Navigation -->
+  <nav class="border-b border-hacker-green py-4 px-6 sticky top-0 bg-hacker-black/90 backdrop-blur-sm z-50">
+    <div class="container mx-auto flex justify-between items-center">
+      <a href="/" class="text-2xl font-bold bg-gradient-to-r from-hacker-green to-hacker-neon text-fill-transparent animate-pulse">RISKI ARDIANE</a>
+      
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-6">
+        <a href="/" class="hover:text-hacker-neon transition-colors border-b-2 border-transparent hover:border-hacker-green">Home</a>
+        <a href="/#projects" class="hover:text-hacker-neon transition-colors border-b-2 border-transparent hover:border-hacker-green">Projects</a>
+        <a href="/#contact" class="hover:text-hacker-neon transition-colors border-b-2 border-transparent hover:border-hacker-green">Contact</a>
+        <div id="google_translate_element"></div>
+      </div>
+      
+      <!-- Mobile Hamburger Menu -->
+      <div class="md:hidden">
+        <div class="hamburger" id="mobileMenuToggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Error Content Section -->
+  <section class="py-20 px-6 min-h-screen flex items-center">
+    <div class="container mx-auto max-w-4xl text-center">
+      
+      <!-- Status Indicator -->
+      <div class="mb-12">
+        <div class="terminal-command inline-block mb-6">
+          <span class="terminal-prompt">$</span> check --status-code
+        </div>
+        <div id="statusIndicator" class="text-sm text-gray-400 mb-4"></div>
+      </div>
+
+      <!-- 404 Error -->
+      <div id="error404" class="error-content hidden">
+        <div class="error-ascii text-xs md:text-sm mb-8 error-404 animate-error-pulse">
+██╗  ██╗ ██████╗ ██╗  ██╗
+██║  ██║██╔═████╗██║  ██║
+███████║██║██╔██║███████║
+╚════██║████╔╝██║╚════██║
+     ██║╚██████╔╝     ██║
+     ╚═╝ ╚═════╝      ╚═╝
+        </div>
+        
+        <h1 class="text-6xl md:text-8xl font-bold mb-6 error-404 animate-glitch">
+          404
+        </h1>
+        <h2 class="text-2xl md:text-4xl font-bold mb-4 text-red-400">
+          PAGE NOT FOUND
+        </h2>
+        <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-8">
+          The page you're looking for has been moved, deleted, or never existed. Let's get you back to safety.
+        </p>
+        
+        <div class="terminal-command mb-8">
+          <span class="terminal-prompt">$</span> curl -I <span id="currentUrl"></span><br>
+          <span class="terminal-output">HTTP/1.1 404 Not Found</span><br>
+          <span class="terminal-output">Status: Page does not exist</span>
+        </div>
+      </div>
+
+      <!-- 500 Error -->
+      <div id="error500" class="error-content hidden">
+        <div class="error-ascii text-xs md:text-sm mb-8 error-500 animate-error-pulse">
+███████╗ ██████╗  ██████╗ 
+██╔════╝██╔═████╗██╔═████╗
+███████╗██║██╔██║██║██╔██║
+╚════██║████╔╝██║████╔╝██║
+███████║╚██████╔╝╚██████╔╝
+╚══════╝ ╚═════╝  ╚═════╝
+        </div>
+        
+        <h1 class="text-6xl md:text-8xl font-bold mb-6 error-500 animate-glitch">
+          500
+        </h1>
+        <h2 class="text-2xl md:text-4xl font-bold mb-4 text-orange-400">
+          INTERNAL SERVER ERROR
+        </h2>
+        <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-8">
+          Something went wrong on our end. Our servers are experiencing issues. Please try again later.
+        </p>
+        
+        <div class="terminal-command mb-8">
+          <span class="terminal-prompt">$</span> systemctl status web-server<br>
+          <span class="terminal-output">● web-server.service - failed</span><br>
+          <span class="terminal-output">Error: Internal server malfunction</span>
+        </div>
+      </div>
+
+      <!-- 503 Error -->
+      <div id="error503" class="error-content hidden">
+        <div class="error-ascii text-xs md:text-sm mb-8 error-503 animate-error-pulse">
+███████╗ ██████╗ ██████╗ 
+██╔════╝██╔═████╗╚════██╗
+███████╗██║██╔██║ █████╔╝
+╚════██║████╔╝██║ ╚═══██╗
+███████║╚██████╔╝██████╔╝
+╚══════╝ ╚═════╝ ╚═════╝ 
+        </div>
+        
+        <h1 class="text-6xl md:text-8xl font-bold mb-6 error-503 animate-glitch">
+          503
+        </h1>
+        <h2 class="text-2xl md:text-4xl font-bold mb-4 text-yellow-400">
+          SERVICE UNAVAILABLE
+        </h2>
+        <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-8">
+          The service is temporarily unavailable due to maintenance or overload. Please try again in a few moments.
+        </p>
+        
+        <div class="terminal-command mb-8">
+          <span class="terminal-prompt">$</span> ping riskiardiane.dev<br>
+          <span class="terminal-output">PING failed: Service temporarily unavailable</span><br>
+          <span class="terminal-output">Retry-After: 300 seconds</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mt-12">
+        <a href="/" class="bg-hacker-green text-black font-bold py-3 px-8 rounded-lg hover:bg-hacker-neon transition-colors transform hover:scale-105">
+          RETURN HOME
+        </a>
+        <a href="javascript:history.back()" class="border-2 border-hacker-green py-3 px-8 rounded-lg hover:bg-hacker-green/20 transition-colors">
+          GO BACK
+        </a>
+        <button onclick="location.reload()" class="border-2 border-gray-600 text-gray-300 py-3 px-8 rounded-lg hover:bg-gray-600/20 transition-colors">
+          RETRY
+        </button>
+      </div>
+
+      <!-- Additional Help -->
+      <div class="mt-16 bg-gray-900 p-8 rounded-xl border border-hacker-green">
+        <h3 class="text-xl font-bold mb-4 text-hacker-neon">NEED HELP?</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+          <div>
+            <h4 class="font-bold text-hacker-green mb-2">Contact Support</h4>
+            <p class="text-gray-300 text-sm">Email: hello@riskiardiane.dev</p>
+          </div>
+          <div>
+            <h4 class="font-bold text-hacker-green mb-2">Report Issue</h4>
+            <button onclick="reportError()" class="text-gray-300 text-sm hover:text-hacker-green transition-colors cursor-pointer">
+              Click to report this error
+            </button>
+          </div>
+          <div>
+            <h4 class="font-bold text-hacker-green mb-2">Status Page</h4>
+            <p class="text-gray-300 text-sm">Check service status</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-8 border-t border-hacker-green">
+    <div class="container mx-auto px-6 text-center">
+      <div class="terminal-command mb-2 inline-block">
+        <span class="terminal-prompt">$</span> contact --email hello@riskiardiane.dev
+      </div>
+      <p class="text-gray-500">@2025 Riski Ardiane. All rights reserved.</p>
+      
+      <div class="mt-6 flex justify-center space-x-4">
+        <a href="#" class="text-gray-400 hover:text-hacker-green transition-colors">GitHub</a>
+        <a href="#" class="text-gray-400 hover:text-hacker-green transition-colors">LinkedIn</a>
+        <a href="#" class="text-gray-400 hover:text-hacker-green transition-colors">Twitter</a>
+        <a href="#" class="text-gray-400 hover:text-hacker-green transition-colors">Dribbble</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Auto-detect error type from HTTP status
+    function detectErrorType() {
+      // Try to detect from browser's performance API
+      const performanceEntries = performance.getEntriesByType('navigation');
+      
+      // Check URL parameters first
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('error')) {
+        return parseInt(urlParams.get('error'));
+      }
+      
+      // Check document title or other indicators
+      const title = document.title.toLowerCase();
+      if (title.includes('500')) return 500;
+      if (title.includes('503')) return 503;
+      
+      // Check if we can determine from referrer or current path
+      const path = window.location.pathname;
+      if (path.includes('500') || path.includes('error-500')) return 500;
+      if (path.includes('503') || path.includes('error-503')) return 503;
+      
+      // Default to 404 if we can't determine
+      return 404;
+    }
+
+    // Show specific error type
+    function showError(errorCode) {
+      // Hide all error content
+      document.querySelectorAll('.error-content').forEach(content => {
+        content.classList.add('hidden');
+      });
+      
+      // Show selected error content
+      const errorElement = document.getElementById(`error${errorCode}`);
+      if (errorElement) {
+        errorElement.classList.remove('hidden');
+      } else {
+        // Fallback to 404 if error type not found
+        document.getElementById('error404').classList.remove('hidden');
+        errorCode = 404;
+      }
+      
+      // Update page title and status indicator
+      document.title = `${errorCode} Error - Riski Ardiane | Full Stack Developer`;
+      
+      const statusIndicator = document.getElementById('statusIndicator');
+      const currentUrl = document.getElementById('currentUrl');
+      
+      if (statusIndicator) {
+        const timestamp = new Date().toLocaleString();
+        statusIndicator.innerHTML = `Error detected at: ${timestamp} | Status Code: ${errorCode}`;
+      }
+      
+      if (currentUrl) {
+        currentUrl.textContent = window.location.href;
+      }
+      
+      // Log error for debugging
+      console.log(`Error page loaded: ${errorCode} at ${window.location.href}`);
+    }
+
+    // Error reporting functionality
+    function reportError() {
+      const visibleError = document.querySelector('.error-content:not(.hidden)');
+      const currentError = visibleError ? visibleError.id.replace('error', '') : '404';
+      const userAgent = navigator.userAgent;
+      const timestamp = new Date().toISOString();
+      const url = window.location.href;
+      const referrer = document.referrer || 'Direct access';
+      
+      const errorReport = {
+        errorCode: currentError,
+        url: url,
+        referrer: referrer,
+        userAgent: userAgent,
+        timestamp: timestamp,
+        screenResolution: `${screen.width}x${screen.height}`,
+        viewport: `${window.innerWidth}x${window.innerHeight}`
+      };
+      
+      console.log('Error Report:', errorReport);
+      
+      // Here you could send the error report to your logging service
+      // fetch('/api/error-report', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(errorReport)
+      // });
+      
+      alert('Error report logged. Thank you for helping us improve!');
+    }
+
+    // Matrix Background Animation
+    document.addEventListener('DOMContentLoaded', function() {
+      // Auto-detect and show appropriate error
+      const detectedError = detectErrorType();
+      showError(detectedError);
+      
+      const matrixBg = document.getElementById('matrixBackground');
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789$%^&*()ERROR404500503';
+      const fontSize = 16;
+      const columns = Math.floor(window.innerWidth / fontSize);
+      
+      // Create matrix columns
+      for (let i = 0; i < columns; i++) {
+        const column = document.createElement('div');
+        column.className = 'matrix-column';
+        column.style.left = `${i * fontSize}px`;
+        column.style.fontSize = `${fontSize}px`;
+        
+        // Random animation duration between 5-10 seconds
+        const duration = Math.random() * 5 + 5;
+        column.style.animationDuration = `${duration}s`;
+        column.style.animationDelay = `${Math.random() * 5}s`;
+        
+        // Generate random characters for the column
+        let text = '';
+        const length = Math.floor(Math.random() * 50) + 20;
+        for (let j = 0; j < length; j++) {
+          text += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        column.textContent = text;
+        
+        matrixBg.appendChild(column);
+      }
+      
+      // Mobile Menu Toggle
+      const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+      const mobileSidebar = document.getElementById('mobileSidebar');
+      const mobileOverlay = document.getElementById('mobileOverlay');
+      
+      function toggleMobileMenu() {
+        const isOpen = mobileSidebar.classList.contains('open');
+        
+        if (isOpen) {
+          // Close menu
+          mobileSidebar.classList.remove('open');
+          mobileOverlay.classList.remove('active');
+          mobileMenuToggle.classList.remove('active');
+          document.body.style.overflow = '';
+        } else {
+          // Open menu
+          mobileSidebar.classList.add('open');
+          mobileOverlay.classList.add('active');
+          mobileMenuToggle.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+      }
+      
+      if (mobileMenuToggle) {
+        mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+      }
+      if (mobileOverlay) {
+        mobileOverlay.addEventListener('click', toggleMobileMenu);
+      }
+      
+      // Close mobile menu when clicking on sidebar links
+      document.querySelectorAll('.sidebar-link').forEach(link => {
+        link.addEventListener('click', () => {
+          setTimeout(toggleMobileMenu, 300);
+        });
+      });
+      
+      // Close mobile menu on window resize if screen becomes larger
+      window.addEventListener('resize', () => {
+        if (window.innerWidth >= 768 && mobileSidebar && mobileSidebar.classList.contains('open')) {
+          toggleMobileMenu();
+        }
+      });
+      
+      // Custom Cursor (only on larger screens)
+      const cursor = document.getElementById('cursor');
+      const cursorFollower = document.getElementById('cursorFollower');
+      
+      if (window.innerWidth >= 1024 && cursor && cursorFollower) {
+        document.addEventListener('mousemove', (e) => {
+          cursor.style.left = e.clientX + 'px';
+          cursor.style.top = e.clientY + 'px';
+          
+          setTimeout(() => {
+            cursorFollower.style.left = e.clientX + 'px';
+            cursorFollower.style.top = e.clientY + 'px';
+          }, 30);
+        });
+        
+        // Cursor interaction with links and buttons
+        document.querySelectorAll('a, button').forEach(item => {
+          item.addEventListener('mouseenter', () => {
+            cursor.style.transform = 'translate(-50%, -50%) scale(2.5)';
+            cursor.style.background = '#00ff00';
+            cursorFollower.style.transform = 'translate(-50%, -50%) scale(1.5)';
+            cursorFollower.style.borderColor = '#39ff14';
+          });
+          
+          item.addEventListener('mouseleave', () => {
+            cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+            cursor.style.background = '#00ff00';
+            cursorFollower.style.transform = 'translate(-50%, -50%) scale(1)';
+            cursorFollower.style.borderColor = '#00ff00';
+          });
+        });
+      }
+      
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            window.scrollTo({
+              top: target.offsetTop - 80,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+      
+      // Initialize Google Translate for mobile sidebar
+      setTimeout(() => {
+        if (typeof google !== 'undefined' && google.translate) {
+          const mobileTranslateElement = document.getElementById('google_translate_element_mobile');
+          if (mobileTranslateElement) {
+            new google.translate.TranslateElement({
+              pageLanguage: 'en',
+              includedLanguages: 'en,id,es,fr,de,ja,ko,zh'
+            }, 'google_translate_element_mobile');
+          }
+        }
+      }, 1000);
+      
+      // Add dynamic error effects
+      setInterval(() => {
+        const errorNumbers = document.querySelectorAll('.error-content h1');
+        errorNumbers.forEach(num => {
+          if (!num.closest('.hidden')) {
+            // Random glitch effect
+            if (Math.random() < 0.1) {
+              num.classList.add('animate-glitch');
+              setTimeout(() => {
+                num.classList.remove('animate-glitch');
+              }, 500);
+            }
+          }
+        });
+      }, 3000);
+      
+      // Make functions globally available
+      window.reportError = reportError;
+      window.showError = showError;
+      
+      // Handle browser back/forward navigation
+      window.addEventListener('popstate', () => {
+        const detectedError = detectErrorType();
+        showError(detectedError);
+      });
+      
+      // Check for server-sent error codes via meta tags or headers
+      const errorMetaTag = document.querySelector('meta[name="http-status"]');
+      if (errorMetaTag) {
+        const statusCode = parseInt(errorMetaTag.getAttribute('content'));
+        if ([404, 500, 503].includes(statusCode)) {
+          showError(statusCode);
+        }
+      }
+    });
+
+    // Prevent body scroll when mobile menu is open
+    document.addEventListener('touchmove', function(e) {
+      if (document.body.style.overflow === 'hidden') {
+        e.preventDefault();
+      }
+    }, { passive: false });
+    
+    // Keyboard shortcuts for navigation
+    document.addEventListener('keydown', function(e) {
+      if (e.ctrlKey || e.metaKey) return; // Ignore if Ctrl/Cmd is pressed
+      
+      switch(e.key) {
+        case 'h':
+        case 'H':
+          window.location.href = '/';
+          break;
+        case 'r':
+        case 'R':
+          location.reload();
+          break;
+        case 'b':
+        case 'B':
+          history.back();
+          break;
+        case 'Escape':
+          // Close mobile menu if open
+          const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+          const mobileSidebar = document.getElementById('mobileSidebar');
+          if (mobileSidebar && mobileSidebar.classList.contains('open') && mobileMenuToggle) {
+            mobileMenuToggle.click();
+          }
+          break;
+      }
+    });
+    
+    // Handle network errors
+    window.addEventListener('online', () => {
+      console.log('Network connection restored');
+    });
+    
+    window.addEventListener('offline', () => {
+      console.log('Network connection lost');
+    });
+  </script>
+</body>
+</html>
